@@ -1,0 +1,81 @@
+.ioe-parent {
+    width: 100%;
+    height: 100%;
+    padding: 20px 30px 36px 30px;
+    background: rgba(246,94,135,0.8);
+    border-radius: 0 4px 4px 0;
+    border-radius: 15px;
+    position: relative;
+}
+.candidates-item {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.circle-blue {
+    background: #3cc2f5;
+}
+.circle-40 {
+    display: flex;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    border-radius: 50%;
+    z-index: 2;
+    position: relative;
+}
+.candidates-info {
+    display: block;
+    padding-left: 20px;
+    margin-left: 10px;
+}
+.sub-txt {
+    color: #ecfb70;
+    font-size: 24px;
+    display: inline;
+    margin-left: 5px;
+}
+.class-students {
+    display: block;
+    font-size: 24px;
+    color: #85e68d;
+    font-weight: 500;
+}
+.circle-blue:before {
+    background: #3cc2f5;
+}
+.circle-40:before {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    opacity: .1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: -1;
+}
+.circle-blue:after {
+    background: #3cc2f5;
+}
+.circle-40:after {
+    content: "";
+    display: block;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: -1;
+    opacity: .3;
+}
