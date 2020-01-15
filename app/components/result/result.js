@@ -156,5 +156,5 @@ class Result extends React.Component{
 ReactDOM.render(
     <div>
         <Result/>
-    </div>, document.getElementById('result')
+    </div>, document.getElementById('results')
 )

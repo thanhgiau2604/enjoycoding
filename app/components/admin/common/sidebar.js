@@ -37,7 +37,7 @@ class Sidebar extends React.Component{
           </li>
           <li class={classValue4}>
             <i class='icon-trophy'></i>
-            <a href='/result'>Result</a>
+            <a href='/manageResult'>Result</a>
           </li>
         </ul>
       </section>)

@@ -138,5 +138,5 @@ ReactDOM.render(
             <Tool curpage="Result"/>
             <Result/>
         </div>
-    </div>,document.getElementById("result")
+    </div>,document.getElementById("manageResult")
 )
