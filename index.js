@@ -22,8 +22,8 @@ app.use(function(req,res,next) {
   res.setHeader('Access-Control-Allow-Headers','X-Requested-With,content-type,Authorization,x-access-token');
   next();
 });
-mongoose.connect("mongodb+srv://thanhgiau2604:enjoycoding@enjoycoding-7qryf.mongodb.net/test?retryWrites=true&w=majority");
-// mongoose.connect("mongodb://localhost:27017/enjoycoding");
+// mongoose.connect("mongodb+srv://thanhgiau2604:enjoycoding@enjoycoding-7qryf.mongodb.net/test?retryWrites=true&w=majority");
+mongoose.connect("mongodb://localhost:27017/enjoycoding");
 homeController(app);
 submitController(app);
 deadlineController(app);

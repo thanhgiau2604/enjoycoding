@@ -11,7 +11,20 @@ function getCurrentDay() {
   var nowday = "Ngày: "+day.toString()+"/"+month.toString()+"/"+year.toString();
   return nowday;
 }
-
+function getDateTime(){
+  var dateObj = new Date();
+  var month = (dateObj.getMonth() + 1).toString(); //months from 1-12
+  if (month.length==1) month="0"+month;
+  var day = dateObj.getDate().toString();
+  if (day.length==1) day="0"+month;
+  var year = dateObj.getFullYear().toString();
+  var hour = dateObj.getHours().toString();
+  if (hour.length==1) hour="0"+hour;
+  var minu = dateObj.getMinutes().toString();
+  if (minu.length==1) minu="0"+minu;
+  var nowdatetime = year+month+day+hour+minu;
+  return parseInt(nowdatetime);
+}
 var filePlace;
 class ListFile extends React.Component {
   constructor(props){
@@ -72,7 +85,14 @@ class Submit extends React.Component{
       file = e.target.files[0];
     }
     submitExercise(){
-      var that = this;
+      var curTime = getDateTime();
+      var requireTime = parseInt(this.state.submit.end);
+      console.log(curTime);
+      console.log(requireTime);
+      if (curTime>requireTime){
+        this.setState({addSuccess:0});
+      } else {
+        var that = this;
       let fileFormObj = new FormData();
       fileFormObj.append("fileData",file);
       $.ajax({
@@ -105,6 +125,7 @@ class Submit extends React.Component{
           that.setState({addSuccess:0})
         }
       })
+      }
     }
     getListFile(){
       this.setState({htmlListFile:<ListFile/>})
@@ -132,7 +153,7 @@ class Submit extends React.Component{
       } else if (this.state.addSuccess==0){
         notify =
           <div class="alert alert-danger" style={{marginTop:"10px"}}>
-            <strong>Có lỗi xảy ra! Hãy thử lại. Có thể bạn chọn không định dạng .ZIP hoặc .RAR</strong>
+            <strong>Có lỗi xảy ra! Hãy thử lại. Có thể bạn chọn không định dạng .ZIP hoặc .RAR hoặc hết hạn nộp</strong>
           </div>
       }
       var submitInfor = "";
