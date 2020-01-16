@@ -99,6 +99,7 @@ class Result extends React.Component{
         this.state = {
           listResult:[]
         }
+        this.goLogin = this.goLogin.bind(this);
     }
     componentDidMount(){
       var that = this;
@@ -107,7 +108,37 @@ class Result extends React.Component{
         that.setState({listResult:data});
       });
     }
+    goLogin(){
+      window.location.replace("/");
+    }
     render(){
+       var idUser = localStorage.getItem("idUser");
+       var htmlMain = <div></div>;
+       if (!idUser){
+         htmlMain=<div class="text-center" style={{margin:"0 auto"}}>
+           <h3 className="text-center">Bạn chưa đăng nhập?</h3>
+           <button class="btn btn-primary text-center" onClick={this.goLogin}>Đăng nhập</button>
+         </div>
+       } else {
+         htmlMain=<table class='table'>
+         <thead>
+           <tr>
+             <th class="text-center">#</th>
+             <th class="text-center">Tên bài bài</th>
+             <th class="text-center">Thời gian</th>
+             <th class="text-center">Tổng điểm đạt được</th>
+             <th class='actions text-center'>
+               Thao tác
+             </th>
+           </tr>
+         </thead>
+         <tbody>
+             {this.state.listResult.map(function(result,index){
+               return (<RowResult key={index} stt={index+1} result={result}/>)
+             })}
+         </tbody>
+       </table>
+       }
         return(<div class="site-wrap">
         <Menu/>   
         <div class="intro-section single-cover" id="home-section">      
@@ -128,25 +159,8 @@ class Result extends React.Component{
         </div>
         <div class="site-section">
           <div class="container">
-            <div class="row">
-            <table class='table'>
-            <thead>
-              <tr>
-                <th class="text-center">#</th>
-                <th class="text-center">Tên bài bài</th>
-                <th class="text-center">Thời gian</th>
-                <th class="text-center">Tổng điểm đạt được</th>
-                <th class='actions text-center'>
-                  Thao tác
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-                {this.state.listResult.map(function(result,index){
-                  return (<RowResult key={index} stt={index+1} result={result}/>)
-                })}
-            </tbody>
-          </table>
+            <div class="row text-center">
+            {htmlMain}
             <ViewSingleResult/>
             </div>
           </div>

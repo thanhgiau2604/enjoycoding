@@ -65,6 +65,7 @@ class Submit extends React.Component{
           htmlListFile: ""
         }
         this.getListFile = this.getListFile.bind(this);
+        this.goLogin = this.goLogin.bind(this);
     }
     ChangeFile(e){
       this.setState({addSuccess:-1})
@@ -118,6 +119,9 @@ class Submit extends React.Component{
         }
       })
     }
+    goLogin(){
+      window.location.replace("/");
+    }
     render(){
       var notify = <div></div>
       if (this.state.addSuccess == 1) {
@@ -143,6 +147,32 @@ class Submit extends React.Component{
           </div>
         </div>
       }
+      var idUser = localStorage.getItem("idUser");
+       var htmlMain = <div></div>;
+       if (!idUser){
+         htmlMain=<div class="text-center" style={{margin:"0 auto", paddingBottom:"30px", paddingTop:"20px"}}>
+           <h3 className="text-center">Bạn chưa đăng nhập?</h3>
+           <button class="btn btn-primary text-center" onClick={this.goLogin}>Đăng nhập</button>
+         </div>
+       } else {
+         htmlMain=<div class="site-section">
+         <div class="container submitFile">
+             <h3 class="text-center">{getCurrentDay()}</h3>
+             <h3 class="text-center" style={{color:'red'}}>{this.state.note}</h3>
+             <div className="row" style={{ marginTop: "10px" }}>
+               <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                 <h5>{this.state.submit.subject}</h5>
+               </div>
+             </div>
+             {submitInfor}
+             {notify}
+             <div className="text-center" style={{marginTop:"15px"}}>
+               <button className="btn btn-danger" onClick={this.getListFile}>XEM DANH SÁCH CÁC FILE ĐÃ NỘP</button>
+               {this.state.htmlListFile}
+             </div>
+         </div>
+       </div>
+       }
         return(<div class="site-wrap">
         <Menu/>   
         <div class="intro-section single-cover" id="home-section">      
@@ -161,23 +191,7 @@ class Submit extends React.Component{
             </div>
           </div>
         </div>
-          <div class="site-section">
-            <div class="container submitFile">
-                <h3 class="text-center">{getCurrentDay()}</h3>
-                <h3 class="text-center" style={{color:'red'}}>{this.state.note}</h3>
-                <div className="row" style={{ marginTop: "10px" }}>
-                  <div className="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                    <h5>{this.state.submit.subject}</h5>
-                  </div>
-                </div>
-                {submitInfor}
-                {notify}
-                <div className="text-center" style={{marginTop:"15px"}}>
-                  <button className="btn btn-danger" onClick={this.getListFile}>XEM DANH SÁCH CÁC FILE ĐÃ NỘP</button>
-                  {this.state.htmlListFile}
-                </div>
-            </div>
-          </div>
+          {htmlMain}
         <Footer/>
       </div>)
     }

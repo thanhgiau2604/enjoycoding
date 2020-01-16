@@ -26,6 +26,7 @@ class Ranking extends React.Component{
         this.state = {
           listRanking:[]
         }
+        this.goLogin = this.goLogin.bind(this);
     }
     componentDidMount(){
       var that = this;
@@ -33,7 +34,24 @@ class Ranking extends React.Component{
         that.setState({listRanking:data});
       })
     }
+    goLogin(){
+      window.location.replace("/");
+    }
     render(){
+      var idUser = localStorage.getItem("idUser");
+       var htmlMain = <div></div>;
+       if (!idUser){
+         htmlMain=<div class="text-center" style={{margin:"0 auto"}}>
+           <h3 className="text-center" style={{color:'white'}}>Bạn chưa đăng nhập?</h3>
+           <button class="btn btn-primary text-center" onClick={this.goLogin}>Đăng nhập</button>
+         </div>
+       } else {
+         htmlMain=<div class="ioe-parent container" style={{paddingLeft:"35%"}}>
+         {this.state.listRanking.map(function(user,index){
+           return(<Contestant key={index} stt={index+1} user={user}/>)
+         })}
+       </div>
+       }
         return(<div class="site-wrap">
         <Menu/>   
         <div class="intro-section" id="home-section">      
@@ -45,11 +63,7 @@ class Ranking extends React.Component{
                     <div class="col-lg-6">
                       <h1 data-aos="fade-up" data-aos-delay="0">BẢNG XẾP HẠNG</h1>
                     </div>
-                    <div class="ioe-parent container" style={{paddingLeft:"35%"}}>
-                      {this.state.listRanking.map(function(user,index){
-                        return(<Contestant key={index} stt={index+1} user={user}/>)
-                      })}
-                    </div>
+                    {htmlMain}
                   </div>
                 </div>           
               </div>

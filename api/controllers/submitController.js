@@ -12,16 +12,6 @@ function getCurrentDayTime() {
     var nowday = day.toString()+"-"+month.toString()+"-"+year.toString()+" "+hour.toString()+"h"+minute.toString();
     return nowday;
   }
-// var submit = {
-//     day:"1412020",
-//     end:"15120201030",
-//     deadline:"15/1/2020 10:30",
-//     subject: "Nộp bài tập về nhà",
-//     description: "Nộp đúng hạn - nộp file nén",
-//     listSubmit: [],
-//     status: 1
-// }
-// Submit.create(submit);
 module.exports = function(app){
     var nameFile;
     var time;
