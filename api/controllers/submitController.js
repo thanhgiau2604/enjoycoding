@@ -1,8 +1,5 @@
 const bodyParser = require("body-parser");
 const multer = require('multer');
-const fs = require('fs');
-const readline = require('readline');
-const {google} = require('googleapis');
 const parser = bodyParser.urlencoded({extended:false});
 const Submit = require("../models/submit");
 function getCurrentDayTime() {
@@ -63,17 +60,19 @@ module.exports = function(app){
 
     app.post("/saveSubmit",parser,(req,res)=>{
         var submit = {
-            user:req.body.user,
-            name: req.body.name,
-            url: req.body.url,
-            timestamp:req.body.timestamp,
-            time:req.body.time
+            user:parseInt(req.body.user),
+            name: req.body.name.toString(),
+            url: req.body.url.toString(),
+            timestamp:parseInt(req.body.timestamp),
+            time:req.body.time.toString(),
         }
-        console.log(submit);
+        //console.log(submit);
         Submit.findOne({status:1},function(err,data){
             if (!err){
+                console.log(data);
                 Submit.findOneAndUpdate({_id:data._id},{"$push":{listSubmit:{user:submit.user,name:submit.name,url:submit.url,
-                    timestamp:submit.timestamp,time:submit.time}}},{new:true},function(err,newdata){
+                    timestamp:submit.timestamp,time:submit.time,listScore:[]}}},{new:true},function(err,newdata){
+
                     res.send(newdata);
                 })
             }
@@ -113,7 +112,7 @@ module.exports = function(app){
                             }
                         }
                     }
-                    console.log(arrResult);
+                    
                     res.send(arrResult);
                 }
             }

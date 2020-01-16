@@ -6,9 +6,14 @@ class Navbar extends React.Component{
         this.goMessage = this.goMessage.bind(this);
     }
     componentDidMount(){
-        
+        var idAdmin = localStorage.getItem("idAdmin");
+        if (!idAdmin){
+            window.location.replace("/");
+        }
     }
     handleSignOut(){
+        localStorage.removeItem("idAdmin");
+        localStorage.removeItem("name");
         window.location.assign("/");
     }
     goMessage(){
@@ -29,8 +34,7 @@ class Navbar extends React.Component{
                 <li class='dropdown user'>
                     <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
                         <i class='icon-user'></i>
-                        <strong>{localStorage.getItem('usernamead')}</strong>
-                        <img class="img-rounded" src="http://placehold.it/20x20/ccc/777" />
+                        <strong>{localStorage.getItem('name')}</strong>
                         <b class='caret'></b>
                     </a>
                     <ul class='dropdown-menu'>

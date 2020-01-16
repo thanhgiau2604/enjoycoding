@@ -21,9 +21,14 @@ class LoginForm extends React.Component{
         if (data.success!=1){
           that.setState({err:data});
         } else {
-          localStorage.setItem("idUser",data.user.id);
           localStorage.setItem("name",data.user.name);
-          main.setState({form:<InforForm/>})
+          if (data.user.role=="admin"){
+            localStorage.setItem("idAdmin",data.user.id);
+            window.location.replace("/dashboard");
+          } else {
+            localStorage.setItem("idUser",data.user.id);
+            main.setState({form:<InforForm/>})
+          }
         }
       })
       e.preventDefault();

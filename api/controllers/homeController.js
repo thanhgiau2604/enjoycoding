@@ -14,11 +14,10 @@ module.exports = function(app){
         if (!id || !password){
             res.send("Hãy điền đầy đủ thông tin");
         } else {
-            User.findOne({id:id},function(err,user){
+            User.findOne({id:id,isDelete:0},function(err,user){
                 if (err){
                     res.send("Lỗi: "+ err);
                 } else {
-                    console.log(user);
                     if (!user){
                         res.send("Id hoặc mật khẩu không đúng");
                     } else if (password!=user.password){
@@ -41,7 +40,7 @@ module.exports = function(app){
 
     //xep hang
     app.post("/getRank",(req,res)=>{
-        User.find({}).sort({score:"descending"}).exec(function(err,data){
+        User.find({isDelete:0}).sort({score:"descending"}).exec(function(err,data){
             if (!err){
                 res.send(data);
             }

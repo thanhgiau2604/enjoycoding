@@ -33,7 +33,6 @@ class ViewSingleResult extends React.Component{
                         <th class="text-center">#</th>
                         <th class="text-center">Tên bài</th>
                         <th class="text-center">Điểm số</th>
-                        <th class="text-center">Loại bài</th>
                         <th class="text-center">Đánh giá</th>
                       </tr>
                     </thead>
@@ -44,7 +43,6 @@ class ViewSingleResult extends React.Component{
                             <td class="text-center">{index+1}</td>
                             <td class="text-center">{exercise.name}</td>
                             <td class="text-center">{exercise.score} điểm</td>
-                            <td class="text-center">{exercise.typeExercise}</td>
                             <td class="text-center">{exercise.note}</td>
                           </tr>)
                       })}
@@ -70,19 +68,23 @@ class RowResult extends React.Component{
     this.viewDetail = this.viewDetail.bind(this);
   }
   viewDetail(){
-    detail.setState({result:this.props.result.listExercise});
+    if (this.props.result.listScore){
+      detail.setState({result:this.props.result.listScore});
+    } else {
+      detail.setState({result:[]});
+    }
   }
   render(){
-    var score= 0;
-    if (this.props.result.listExercise){
-      this.props.result.listExercise.forEach(element => {
+    var score=0;
+    if (this.props.result.listScore){
+      this.props.result.listScore.forEach(element => {
         score+=element.score;
       });
     }
     return(<tr class='active'>
     <td class="text-center">{this.props.stt}</td>
-    <td class="text-center">{this.props.result.day}</td>
-    <td class="text-center">{this.props.result.listExercise.length}</td>
+    <td class="text-center">{this.props.result.name}</td>
+    <td class="text-center">{this.props.result.time}</td>
     <td class="text-center">{score}</td>
     <td class="text-center"><a class='btn btn-success btnDetail' data-toggle='tooltip' style={{ cursor: 'pointer' }} title='Chi tiết' data-toggle="modal"
       data-target="#modalView" onClick={this.viewDetail}>
@@ -131,9 +133,9 @@ class Result extends React.Component{
             <thead>
               <tr>
                 <th class="text-center">#</th>
-                <th class="text-center">Ngày</th>
-                <th class="text-center">Số bài tập hoàn thành</th>
-                <th class="text-center">Tổng điểm</th>
+                <th class="text-center">Tên bài bài</th>
+                <th class="text-center">Thời gian</th>
+                <th class="text-center">Tổng điểm đạt được</th>
                 <th class='actions text-center'>
                   Thao tác
                 </th>
