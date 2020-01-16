@@ -30,9 +30,19 @@ module.exports = function(app){
         const id = req.body.id;
         User.update({_id:id},{isDelete:1},function(err,data){
             if (!err){
-                res.send({sucess:1});
+                res.send({success:1});
             } else {
-                res.send({sucess:0});
+                res.send({success:0});
+            }
+        })
+    });
+    app.post("/restoreUser",parser,(req,res)=>{
+        const id = req.body.id;
+        User.update({_id:id},{isDelete:0},function(err,data){
+            if (!err){
+                res.send({success:1});
+            } else {
+                res.send({success:0});
             }
         })
     });

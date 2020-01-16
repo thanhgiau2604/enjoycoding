@@ -4,7 +4,7 @@ import Navbar from '../common/navbar'
 import Sidebar from '../common/sidebar'
 import Tool from '../common/tool'
 import $ from 'jquery'
-var main,detail,evalua;
+var main,detail,evalua,edit;
 
 class ViewSingleResult extends React.Component{
   constructor(props){
@@ -66,7 +66,6 @@ class FormEvaluate extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      result: [],
       countItem:1,
       addSuccess:-1
     }
@@ -88,8 +87,9 @@ class FormEvaluate extends React.Component{
       }
     }
     var idSubmit = localStorage.getItem("idSubmit");
+    var user = localStorage.getItem("submitUser");
     var that = this;
-    $.post("/addScore",{idSubmit:idSubmit,arrScore:JSON.stringify(arrScore)},function(data){
+    $.post("/addScore",{idSubmit:idSubmit,arrScore:JSON.stringify(arrScore),user:user},function(data){
       if (data=="ok"){
         $.get("/getListSubmit",function(data){
           main.setState({listResult:data});
@@ -173,11 +173,142 @@ class FormEvaluate extends React.Component{
   </div>)
   }
 }
+class FormEditEvaluate extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      listScore: [],
+      countItem:0,
+      updateSuccess:-1
+    }
+    this.submitForm = this.submitForm.bind(this);
+    this.addExercise = this.addExercise.bind(this);
+    this.add = this.add.bind(this);
+    this.changeValue = this.changeValue.bind(this);
+    edit = this;
+  }
+  submitForm(){
+    var arrScore = []
+    for(var i=0; i<this.state.countItem;i++){
+      var item = {
+        name: this.refs["name"+i].value,
+        score: parseInt(this.refs["score"+i].value),
+        note:this.refs["comment"+i].value
+      }
+      if (this.refs["name"+i].value&&this.refs["score"+i].value){
+        arrScore.push(item);
+      }
+    }
+    var idSubmit = localStorage.getItem("idSubmit");
+    var user = localStorage.getItem("submitUser");
+    var that = this;
+    $.post("/addScore",{idSubmit:idSubmit,arrScore:JSON.stringify(arrScore),user:user},function(data){
+      if (data=="ok"){
+        $.get("/getListSubmit",function(data){
+          main.setState({listResult:data});
+          that.setState({updateSuccess:1});
+        });
+      } else {
+        that.setState({updateSuccess:0})
+      }
+    })
+  }
+  addExercise(){
+    this.setState({countItem:this.state.countItem+1});
+  }
+  add(e){
+    if (e.key==="Enter"){
+      this.setState({countItem:this.state.countItem+1});
+    }
+  }
+  changeValue(e){
+    if (this.state.updateSuccess!=-1){
+      this.setState({updateSuccess:-1});
+    }
+  }
+  render(){
+    var tableHtml = [];
+    if (this.state.listScore.length!=0){
+      for (var i=0; i<this.state.listScore.length; i++){
+        var item = <tr class='active' key={i}>
+          <td class="text-center">{i + 1}</td>
+          <td class="text-center"><input type="text" className="form-control" ref={"name"+i} onKeyPress={this.add} defaultValue={this.state.listScore[i].name} onChange={this.changeValue}/></td>
+          <td class="text-center"><input type="text" className="form-control" ref={"score"+i} onKeyPress={this.add} defaultValue={this.state.listScore[i].score} onChange={this.changeValue}/></td>
+          <td class="text-center"><input type="text" className="form-control" ref={"comment"+i} onKeyPress={this.add} defaultValue={this.state.listScore[i].note} onChange={this.changeValue}/></td>
+        </tr>
+        tableHtml.push(item);
+      }
+      for (var i=this.state.listScore.length; i<this.state.countItem; i++){
+        var item = <tr class='active' key={i}>
+          <td class="text-center">{i + 1}</td>
+          <td class="text-center"><input type="text" className="form-control" ref={"name"+i} onKeyPress={this.add} onChange={this.changeValue}/></td>
+          <td class="text-center"><input type="text" className="form-control" ref={"score"+i} onKeyPress={this.add} onChange={this.changeValue}/></td>
+          <td class="text-center"><input type="text" className="form-control" ref={"comment"+i} onKeyPress={this.add} onChange={this.changeValue}/></td>
+        </tr>
+        tableHtml.push(item);
+      }
+    }
+    
+    var notifyHtml = "";
+    if (this.state.updateSuccess==1){
+      notifyHtml = 
+        <div class="alert alert-success">
+          <strong>Update Scores Successfully!</strong>
+        </div>
+    } else if (this.state.updateSuccess==0){
+      notifyHtml = 
+        <div class="alert alert-danger">
+          <strong>A error occurred. Please try it again!</strong>
+        </div>
+    }
+    return(<div class="container">
+    <div class="modal fade" id="modalEditEvaluate" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">UPDATE EVALUATING</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="form-group">
+                  <label for="quanty">Update scores:</label><br/>
+                  <table class='table table-hover'>
+                    <thead>
+                      <tr>
+                        <th class="text-center">#</th>
+                        <th class="text-center">Name</th>
+                        <th class="text-center">Score</th>
+                        <th class="text-center">Comment</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {tableHtml}
+                    </tbody>
+                  </table>
+                  <button className="btn btn-success" onClick={this.addExercise} style={{margin:"0 50%"}}>+</button>
+                </div>  
+              </div>
+            </div>
+          </div>
+          {notifyHtml}
+          <div class="modal-footer">
+            <button type="button" className="btn btn-danger" type="submit" onClick={this.submitForm}>Save</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>)
+  }
+}
 class RowResult extends React.Component{
   constructor(props){
     super(props);
     this.viewDetail = this.viewDetail.bind(this);
     this.evaluate = this.evaluate.bind(this);
+    this.editScore = this.editScore.bind(this);
   }
   viewDetail(){
     if (this.props.result.listScore){
@@ -188,6 +319,12 @@ class RowResult extends React.Component{
   }
   evaluate(){
     localStorage.setItem("idSubmit",this.props.result._id);
+    localStorage.setItem("submitUser",this.props.result.user);
+  }
+  editScore(){
+    localStorage.setItem("idSubmit",this.props.result._id);
+    localStorage.setItem("submitUser",this.props.result.user);
+    edit.setState({listScore:this.props.result.listScore, countItem:this.props.result.listScore.length});
   }
   render(){
     var score=0;
@@ -204,7 +341,7 @@ class RowResult extends React.Component{
     <td class='action text-center'>
     <a data-toggle="modal" data-target="#modalEvaluate"  class="btn btn-warning btnAction" title='Evaluate' onClick={this.evaluate}><i class='icon-check'></i></a>
       <a data-toggle="modal" data-target="#modalView"  class="btn btn-primary btnAction" title='View results' onClick={this.viewDetail} style={{cursor:'pointer', marginLeft:"5px"}}><i class='icon-zoom-in'></i></a>
-      <a class='btn btn-info'data-toggle="modal" data-target="#modalEdit"  style={{cursor:'pointer', marginLeft:"5px"}} title='Edit Score' onClick={this.editScore}>
+      <a class='btn btn-info'data-toggle="modal" data-target="#modalEditEvaluate"  style={{cursor:'pointer', marginLeft:"5px"}} title='Edit Score' onClick={this.editScore}>
         <i class='icon-edit'></i>
       </a>
     </td>
@@ -274,6 +411,7 @@ class Result extends React.Component{
           </table>
           <ViewSingleResult/>
           <FormEvaluate/>
+          <FormEditEvaluate/>
         </div>
       </div>)
     }

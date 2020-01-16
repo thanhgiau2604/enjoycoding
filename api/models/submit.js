@@ -8,7 +8,7 @@ const SubmitSchema = new Schema({
     subject: String,
     description: String,
     listSubmit: [{user:Number, name:String,url:String,timestamp:Number, time:String, 
-        listScore:{name:String, score: Number, note:String}}],
+        listScore:[{name:String, score: Number, note:String}]}],
     status: Number 
 });
 

@@ -40,7 +40,7 @@ module.exports = function(app){
 
     //xep hang
     app.post("/getRank",(req,res)=>{
-        User.find({isDelete:0}).sort({score:"descending"}).exec(function(err,data){
+        User.find({isDelete:0,role:"user"}).sort({score:"descending"}).exec(function(err,data){
             if (!err){
                 res.send(data);
             }

@@ -57,14 +57,39 @@ module.exports = function(app){
     app.post("/addScore",parser,(req,res)=>{
         const idSubmit = req.body.idSubmit;
         const arrScore = JSON.parse(req.body.arrScore);
+        const user = parseInt(req.body.user);
         Submit.findOne({listSubmit:{$elemMatch:{_id:idSubmit}}},function(err,data){
             if (!err&&data){
                 Submit.findOneAndUpdate({_id:data._id,"listSubmit._id":idSubmit},{"$set":{"listSubmit.$.listScore":arrScore}},{new:true},function(err,response){
                     if (!err){
+                        var sumScore=0;
+                        Submit.find({},function(err,data){
+                            if (data.length!=0){
+                                data.forEach(deadline => {
+                                    if (deadline.listSubmit.length!=0){
+                                        deadline.listSubmit.forEach(submit => {
+                                            if (submit.user==user){
+                                                if (submit.listScore.length!=0){
+                                                    submit.listScore.forEach(score => {
+                                                        sumScore+=score.score;
+                                                    });
+                                                }
+                                            }
+                                        });
+                                    } 
+                                });
+                                User.update({id:user},{$set:{score:sumScore}},function(err,data){
+                                    if (err){
+                                        alert(err);
+                                    }
+                                });
+                            }
+                        })
                         res.send("ok");
                     }
                 })
             }
-        })
+        });
+        
     })
 }

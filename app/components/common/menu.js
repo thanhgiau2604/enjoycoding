@@ -3,6 +3,18 @@ import React from 'react'
 class Menu extends React.Component{
     constructor(props){
         super(props);
+        this.goResult = this.goResult.bind(this);
+        this.goSubmit = this.goSubmit.bind(this);
+        this.goRank = this.goRank.bind(this);
+    }
+    goRank(){
+      window.location.assign("/rank");
+    }
+    goSubmit(){
+      window.location.assign("/submit");
+    }
+    goResult(){
+      window.location.assign("/result");
     }
     render(){
         const idUser = localStorage.getItem("idUser");
@@ -28,9 +40,9 @@ class Menu extends React.Component{
                     <nav class="site-navigation position-relative text-right" role="navigation">
                       <ul class="site-menu main-menu js-clone-nav mx-auto d-none d-lg-block  m-0 p-0">
                         <li><a href="/" class="nav-link">Trang chủ</a></li>
-                        <li><a href="/submit" class="nav-link">Nộp bài</a></li>
-                        <li><a href="/result" class="nav-link">Kết quả</a></li>
-                        <li><a href="/rank" class="nav-link">Bảng xếp hạng</a></li>
+                        <li><a href="/submit" class="nav-link" onClick={this.goSubmit}>Nộp bài</a></li>
+                        <li><a href="/result" class="nav-link" onClick={this.goResult}>Kết quả</a></li>
+                        <li><a href="/rank" class="nav-link" onClick={this.goRank}>Bảng xếp hạng</a></li>
                       </ul>
                     </nav>
                   </div>

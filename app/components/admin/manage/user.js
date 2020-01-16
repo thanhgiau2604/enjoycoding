@@ -18,13 +18,25 @@ class SingleUser extends React.Component {
     })
   }
   deleteUser(){
-    $.post("/deleteUser",{id:this.props.user._id},function(data){
-      if (data.success==1){
-        $.get("/listUser",function(data){
-          main.setState({listUser:data});
+    if (this.props.user.role!="admin"){
+      if (this.props.user.isDelete==0){
+        $.post("/deleteUser",{id:this.props.user._id},function(data){
+          if (data.success==1){
+            $.get("/listUser",function(data){
+              main.setState({listUser:data});
+            })
+          }
+        })
+      } else {
+        $.post("/restoreUser",{id:this.props.user._id},function(data){
+          if (data.success==1){
+            $.get("/listUser",function(data){
+              main.setState({listUser:data});
+            })
+          }
         })
       }
-    })
+    }  
   }
   render(){
     var statusUser;
