@@ -73,7 +73,8 @@ module.exports = function(app){
                         name:name,
                         password:password,
                         score:0,
-                        isDelete:0
+                        isDelete:0,
+                        role:"user"
                     }
                     User.create(user,function(err,data){
                         if (!err){
