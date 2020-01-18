@@ -4,15 +4,15 @@ import Menu from '../common/menu'
 import Footer from '../common/footer'
 import $ from 'jquery'
 function getCurrentDay() {
-    offset = "+7";
+    var offset = "+7";
     var d = new Date();
     var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
     var day = new Date(utc + (3600000*offset));
-  var nowday = "Ngày: "+day.getDate().toString()+"/"+(day.getMonth+1).toString()+"/"+day.getFullYear().toString();
+  var nowday = "Ngày: "+day.getDate().toString()+"/"+(day.getMonth()+1).toString()+"/"+day.getFullYear().toString();
   return nowday;
 }
 function getDateTime(){
-  offset = "+7";
+  var offset = "+7";
   var d = new Date();
   var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
   var dateObj = new Date(utc + (3600000*offset));
