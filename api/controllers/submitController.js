@@ -3,16 +3,16 @@ const multer = require('multer');
 const parser = bodyParser.urlencoded({extended:false});
 const Submit = require("../models/submit");
 function getCurrentDayTime() {
-    var dateObj = new Date();
-    var month = dateObj.getMonth() + 1; //months from 1-12
-    var day = dateObj.getDate();
-    var year = dateObj.getFullYear();
-    var hour = dateObj.getHours();
-    var minute = dateObj.getMinutes();
-    var nowday = day.toString()+"-"+month.toString()+"-"+year.toString()+" "+hour.toString()+"h"+minute.toString();
+    offset = "+7";
+    var d = new Date();
+    var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+    var day = new Date(utc + (3600000*offset));
+    var nowday = day.getDate().toString()+"-"+(day.getMonth()+1).toString()+"-"+day.getFullYear().toString()+" "
+    +day.getHours().toString()+"h"+day.getMinutes().toString();
     return nowday;
   }
 module.exports = function(app){
+    console.log(getCurrentDayTime());
     var nameFile;
     var time;
     const storage = multer.diskStorage({

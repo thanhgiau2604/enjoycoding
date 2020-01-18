@@ -4,16 +4,19 @@ import Menu from '../common/menu'
 import Footer from '../common/footer'
 import $ from 'jquery'
 function getCurrentDay() {
-  var dateObj = new Date();
-  var month = dateObj.getMonth() + 1; //months from 1-12
-  var day = dateObj.getDate();
-  var year = dateObj.getFullYear();
-  var nowday = "Ngày: "+day.toString()+"/"+month.toString()+"/"+year.toString();
+    offset = "+7";
+    var d = new Date();
+    var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+    var day = new Date(utc + (3600000*offset));
+  var nowday = "Ngày: "+day.getDate().toString()+"/"+(day.getMonth+1).toString()+"/"+day.getFullYear().toString();
   return nowday;
 }
 function getDateTime(){
-  var dateObj = new Date();
-  var month = (dateObj.getMonth() + 1).toString(); //months from 1-12
+  offset = "+7";
+  var d = new Date();
+  var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+  var dateObj = new Date(utc + (3600000*offset));
+  var month = (dateObj.getMonth() + 1).toString(); 
   if (month.length==1) month="0"+month;
   var day = dateObj.getDate().toString();
   if (day.length==1) day="0"+month;
