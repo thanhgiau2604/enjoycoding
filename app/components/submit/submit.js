@@ -60,7 +60,7 @@ class ListFile extends React.Component {
             <td class="text-center">{index+1}</td>
             <td class="text-center">{file.name}</td>
             <td class="text-center">{file.time}</td>
-            <td class="text-center"><a href={file.url}>Click để download</a></td>
+            <td class="text-center"><a href={file.url} target="_blank">Click để download</a></td>
           </tr>)
       })}
     </tbody>
@@ -95,7 +95,7 @@ class Submit extends React.Component{
       if (curTime>requireTime){
         this.setState({addSuccess:0});
       } else {
-        var that = this;
+      var that = this;
       let fileFormObj = new FormData();
       fileFormObj.append("fileData",file);
       $.ajax({
@@ -108,24 +108,31 @@ class Submit extends React.Component{
           if (data.err){
             that.setState({addSuccess:0});
           } else {
-            that.setState({addSuccess:1});
-            var Url = window.location.protocol + "//" + window.location.host;
-            var save = {
-              user: localStorage.getItem("idUser"),
-              name: data.name,
-              url: Url+"/upload/"+data.name,
-              timestamp: parseInt(Date.now().toString()),
-              time: data.time
-            }
-            $.post("/saveSubmit",{user:save.user,name:save.name,url:save.url,timestamp:save.timestamp,time:save.time},function(data){
-              $.post("/getListFile",{user:localStorage.getItem('idUser')},function(data){
-                filePlace.setState({listFile:data});
-              })
-            })
+            $.post("/uploadToDrive",{name:data.name},function(driveData){
+              if (driveData.success == 1) {
+                that.setState({ addSuccess: 1 });
+                var Url = driveData.stringDownload;
+                var save = {
+                  user: localStorage.getItem("idUser"),
+                  name: data.name,
+                  url: Url,
+                  timestamp: parseInt(Date.now().toString()),
+                  time: data.time
+                }
+                $.post("/saveSubmit", { user: save.user, name: save.name, url: save.url, timestamp: save.timestamp, time: save.time }, function (data) {
+                  $.post("/getListFile", { user: localStorage.getItem('idUser') }, function (data) {
+                    that.setState({addSuccess:1})
+                    filePlace.setState({ listFile: data });
+                  })
+                })
+              } else {
+                that.setState({addSuccess:0})
+              }
+          })
           }
         },
         fail: function (err) {
-          that.setState({addSuccess:0})
+          
         }
       })
       }

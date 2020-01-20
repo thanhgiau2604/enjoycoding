@@ -8,6 +8,7 @@ const submitController = require("./api/controllers/submitController");
 const deadlineController = require("./api//controllers/deadlineController");
 const userController = require("./api//controllers/userController");
 const resultController = require("./api//controllers/resultController");
+const driveController = require("./api//controllers/driveController");
 app.set("view engine","ejs");
 app.set('trust proxy', 1) // trust first proxy
 app.use(session({
@@ -29,6 +30,7 @@ submitController(app);
 deadlineController(app);
 userController(app);
 resultController(app);
+driveController(app);
 app.use(express.static(__dirname+"/public"));
 app.get("/",(req,res)=> res.render("trangchu"));
 app.get("/submit",(req,res)=> res.render("nopbai"));
