@@ -109,6 +109,7 @@ class Submit extends React.Component{
             that.setState({addSuccess:0});
           } else {
             $.post("/uploadToDrive",{name:data.name},function(driveData){
+              console.log(driveData);
               if (driveData.success == 1) {
                 that.setState({ addSuccess: 1 });
                 var Url = driveData.stringDownload;

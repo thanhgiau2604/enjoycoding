@@ -26,7 +26,7 @@ module.exports = function(app){
 
     const fileFilter = (req, file, cb) => {
         console.log(file.mimetype);
-        if (file.mimetype == "application/x-zip-compressed" || file.mimetype=="application/octet-stream"){
+        if (file.mimetype == "application/x-zip-compressed" || file.mimetype=="application/octet-stream" || file.mimetype=="application/zip"){
             cb(null, true);
         } else {
             req.fileValidationError = 'Bạn chỉ được phép nộp file ZIP hoặc RAR';
